@@ -24,11 +24,7 @@
 //   in PostScript Level 2, Technical Note #5116
 //   (partners.adobe.com/public/developer/en/ps/sdk/5116.DCT_Filter.pdf)
 
-interface Image {
-  width: number
-  height: number
-  data: Uint8Array
-}
+import { Image } from "./image.ts"
 
 let JpegImage = (function jpegImage() {
   "use strict";

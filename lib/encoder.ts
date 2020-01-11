@@ -34,12 +34,7 @@ JPEG encoder ported to JavaScript and optimized by Andreas Ritter, www.bytestrom
 
 Basic GUI blocking jpeg encoder
 */
-
-interface Image {
-	width: number
-	height: number
-	data: Uint8Array
-}
+import { Image } from "./image.ts"
 
 function JPEGEncoder(quality: number) {
 	var ffloor = Math.floor;
