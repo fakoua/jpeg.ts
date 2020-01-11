@@ -724,7 +724,7 @@ function JPEGEncoder(quality: number) {
 	
 };
 
-export const encode = function (imgData, qu: number = 50) {
+export const encode = function (imgData: Image, qu: number = 50): Image {
   var encoder = new JPEGEncoder(qu);
   var data = encoder.encode(imgData, qu);
   let result: Image = {

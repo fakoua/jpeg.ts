@@ -974,7 +974,7 @@ let JpegImage = (function jpegImage() {
   return constructor;
 })();
 
-export const decode = function (jpegData: Uint8Array, colorTransform: boolean = true) {
+export const decode = function (jpegData: Uint8Array, colorTransform: boolean = true): Image {
 
   let arr = new Uint8Array(jpegData);
   let decoder = new JpegImage();
