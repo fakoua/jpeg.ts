@@ -1,23 +1,15 @@
-import { encode, Image } from "https://raw.githubusercontent.com/fakoua/jpeg.ts/master/mod.ts"
+import { encode, decode } from "./mod.ts"
+import { join } from 'https://deno.land/std/path/mod.ts'
 
-// make image with red gree blue and alpha colors
-
-let image: Image = {
-    width: 2,
-    height: 2,
-    data: new Uint8Array( [
-        255,0,0,1,
-        0,255,0,1,
-        0,0,255,1,
-        255,255,0,1,
-    ])
+async function getRawImage(imageName: string): Promise<Uint8Array> {
+    let image = `tests/res/${imageName}`
+    let fullPath = join(Deno.cwd(), image);
+    let raw = await Deno.readFile(fullPath)
+    return raw;
 }
 
-let raw = encode(image, 100); //Quality 100 (default is 50)
-//save the image
-await Deno.writeFile('rgb.jpg', raw.data);
+let data = await getRawImage("RGBA.jpg");
+let res = decode(data)
 
-
-
-
-
+console.log(res.getPixel(2, 2))
+  

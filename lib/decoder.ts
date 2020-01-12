@@ -981,12 +981,10 @@ export const decode = function (jpegData: Uint8Array, colorTransform: boolean = 
   decoder.parse(arr);
   decoder.colorTransform = colorTransform;
 
-  let image: Image = {
-    width: decoder.width,
-    height: decoder.height,
-    data: new Uint8Array(decoder.width * decoder.height * 4)
-  };
+  let image = new Image();
+  image.height = decoder.height
+  image.width = decoder.width
+  image.data = new Uint8Array(decoder.width * decoder.height * 4)
   decoder.copyToImageData(image);
-
   return image;
 }

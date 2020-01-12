@@ -5,7 +5,7 @@ A pure TypeScript JPEG encoder and decoder for deno
 ## decoder
 
 ```ts
-import { decode } from "https://raw.githubusercontent.com/fakoua/jpeg.ts/master/mod.ts"
+import { decode } from "https://deno.land/x/jpeg.ts/mod.ts"
 
 //read image data:
 let raw = await Deno.readFile(fullPath)
@@ -24,10 +24,25 @@ let result = decode(raw);
 // result.data is an array of RGBa colors
 ```
 
+Also you can access the pixel of the image:
+
+```ts
+import { decode } from "https://deno.land/x/jpeg.ts/mod.ts"
+
+//read image data:
+let raw = await Deno.readFile(fullPath)
+//decode"
+let result = decode(raw);
+
+let pix = result.getPixel(12, 33); // -> { r: 0, g: 0, b: 254, a: 255 }
+// result.getPixel(x, y)
+//while  0 <= x < result.width   and    0 <= y < result.height
+```
+
 ## encoder
 
 ```ts
-import { encode, Image } from "https://raw.githubusercontent.com/fakoua/jpeg.ts/master/mod.ts"
+import { encode, Image } from "https://deno.land/x/jpeg.ts/mod.ts"
 
 // make image with red gree blue and alpha colors
 
