@@ -2,6 +2,8 @@
 
 A pure TypeScript JPEG encoder and decoder for deno
 
+[![Build Status](https://github.com/fakoua/jpeg.ts/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/fakoua/jpeg.ts/actions)
+
 ## decoder
 
 ```ts
