@@ -5,7 +5,7 @@ export class Image {
 	height: number
 	data: Uint8Array
 	getPixel(x: number, y: number): Pixel {
-		let index = x + (y * this.height)
+		let index = x + (y * this.width)
 		let rntVal: Pixel = {
 			r: this.data[index*4],
 			g: this.data[index*4 + 1],
