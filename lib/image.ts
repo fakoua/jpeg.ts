@@ -14,4 +14,11 @@ export class Image {
 		}
 		return rntVal;
 	}
+	setPixel(x: number, y: number, pix: Pixel) {
+		let index = x + (y * this.width)
+			this.data[index*4] = pix.r
+			this.data[index*4 + 1] = pix.g
+			this.data[index*4 + 2] = pix.b
+			this.data[index*4 + 3] = pix.a
+	}
 }
