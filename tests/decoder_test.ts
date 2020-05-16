@@ -1,4 +1,4 @@
-import { test, assertEquals } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts";
 import { decode } from "../lib/decoder.ts"
 import { join } from 'https://deno.land/std/path/mod.ts'
 
@@ -8,14 +8,14 @@ async function getRawImage(imageName: string): Promise<Uint8Array> {
     let raw = await Deno.readFile(fullPath)
     return raw;
 }
-test(async function test_decode_generic() {
+Deno.test("test_decode_generic", async function () {
     let raw = await getRawImage("deno.jpg");
     const result = decode(raw);
     assertEquals(result.width, 730)
     assertEquals(result.height, 488)
 })
 
-test(async function test_decode_red() {
+Deno.test("test_decode_red", async function () {
     let raw = await getRawImage("red.jpg");
     const result = decode(raw);
     assertEquals(result.width, 320)

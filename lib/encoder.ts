@@ -42,9 +42,13 @@ function JPEGEncoder(quality: number) {
 	let UVTable = new Array(64);
 	let fdtbl_Y = new Array(64);
 	let fdtbl_UV = new Array(64);
+	//@ts-ignore
 	let YDC_HT;
+	//@ts-ignore
 	let UVDC_HT;
+	//@ts-ignore
 	let YAC_HT;
+	//@ts-ignore
 	let UVAC_HT;
 	
 	let bitcode = new Array(65535);
@@ -60,6 +64,7 @@ function JPEGEncoder(quality: number) {
 	let VDU = new Array(64);
 	let clt = new Array(256);
 	let RGB_YUV_TABLE = new Array(2048);
+	//@ts-ignore
 	let currentQuality;
 	
 	let ZigZag = [
@@ -126,7 +131,7 @@ function JPEGEncoder(quality: number) {
 			0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,
 			0xf9,0xfa
 		];
-	
+	//@ts-ignore
 	function initQuantTables(sf){
 			let YQT = [
 				16, 11, 10, 16, 24, 40, 51, 61,
@@ -183,6 +188,7 @@ function JPEGEncoder(quality: number) {
 			}
 		}
 		
+		//@ts-ignore
 		function computeHuffmanTbl(nrcodes, std_table){
 			let codevalue = 0;
 			let pos_in_table = 0;
@@ -246,6 +252,7 @@ function JPEGEncoder(quality: number) {
 		}
 		
 		// IO functions
+		//@ts-ignore
 		function writeBits(bs)
 		{
 			let value = bs[0];
@@ -270,12 +277,14 @@ function JPEGEncoder(quality: number) {
 			}
 		}
 	
+		//@ts-ignore
 		function writeByte(value)
 		{
 			//byteout.push(clt[value]); // write char directly instead of converting later
       byteout.push(value);
 		}
 	
+		//@ts-ignore
 		function writeWord(value)
 		{
 			writeByte((value>>8)&0xFF);
@@ -283,6 +292,7 @@ function JPEGEncoder(quality: number) {
 		}
 		
 		// DCT & quantization core
+		//@ts-ignore
 		function fDCTQuant(data, fdtbl)
 		{
 			let d0, d1, d2, d3, d4, d5, d6, d7;
@@ -434,6 +444,7 @@ function JPEGEncoder(quality: number) {
 			writeByte(0); // thumbnheight
 		}
 	
+		//@ts-ignore
 		function writeSOF0(width, height)
 		{
 			writeWord(0xFFC0); // marker
@@ -521,6 +532,7 @@ function JPEGEncoder(quality: number) {
 			writeByte(0); // Bf
 		}
 		
+		//@ts-ignore
 		function processDU(CDU, fdtbl, DC, HTDC, HTAC){
 			let EOB = HTAC[0x00];
 			let M16zeroes = HTAC[0xF0];
@@ -579,7 +591,7 @@ function JPEGEncoder(quality: number) {
 				clt[i] = sfcc(i);
 			}
 		}
-		
+		//@ts-ignore
 		this.encode = function(image,quality) // image data object
 		{
 			if(quality) setQuality(quality);
@@ -654,8 +666,11 @@ function JPEGEncoder(quality: number) {
 
 				}
 				
+				//@ts-ignore
 				DCY = processDU(YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				//@ts-ignore
 				DCU = processDU(UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+				//@ts-ignore
 				DCV = processDU(VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
 				x+=32;
 				}
@@ -678,6 +693,7 @@ function JPEGEncoder(quality: number) {
       return new Uint8Array(byteout);
 	}
 	
+	//@ts-ignore
 	function setQuality(quality){
 		if (quality <= 0) {
 			quality = 1;
@@ -686,6 +702,7 @@ function JPEGEncoder(quality: number) {
 			quality = 100;
 		}
 		
+		//@ts-ignore
 		if(currentQuality == quality) return // don't recalc if unchanged
 		
 		let sf = 0;
@@ -716,6 +733,7 @@ function JPEGEncoder(quality: number) {
 };
 
 export const encode = function (imgData: Image, qu: number = 50): Image {
+	//@ts-ignore
   let encoder = new JPEGEncoder(qu);
   let data = encoder.encode(imgData, qu);
   let result = new Image();

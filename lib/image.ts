@@ -1,8 +1,11 @@
 import { Pixel } from "./pixel.ts"
 
 export class Image {
+	//@ts-ignore
 	width: number
+	//@ts-ignore
 	height: number
+	//@ts-ignore
 	data: Uint8Array
 	getPixel(x: number, y: number): Pixel {
 		let index = x + (y * this.width)

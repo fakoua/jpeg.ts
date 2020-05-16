@@ -1,7 +1,7 @@
-import { test, assertEquals } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts";
 import { encode, Image } from "../mod.ts"
 
-test(function test_encoder() {
+Deno.test("test_encoder", function () {
     let image = new Image()  
 
         image.width= 2

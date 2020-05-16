@@ -1,28 +1,5 @@
-/* -*- tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
-/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
-/*
-   Copyright 2011 notmasteryet
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-
-// - The JPEG specification can be found in the ITU CCITT Recommendation T.81
-//   (www.w3.org/Graphics/JPEG/itu-t81.pdf)
-// - The JFIF specification can be found in the JPEG File Interchange Format
-//   (www.w3.org/Graphics/JPEG/jfif3.pdf)
-// - The Adobe Application-Specific JPEG markers in the Supporting the DCT Filters
-//   in PostScript Level 2, Technical Note #5116
-//   (partners.adobe.com/public/developer/en/ps/sdk/5116.DCT_Filter.pdf)
+//@ts-check
+//@ts-ignore
 
 import { Image } from "./image.ts"
 
@@ -58,6 +35,7 @@ let JpegImage = (function jpegImage() {
   function constructor() {
   }
 
+  //@ts-ignore
   function buildHuffmanTable(codeLengths, values) {
     let k = 0, code = [], i, j, length = 16;
     while (length > 0 && !codeLengths[length - 1])
@@ -66,15 +44,19 @@ let JpegImage = (function jpegImage() {
     let p = code[0], q;
     for (i = 0; i < length; i++) {
       for (j = 0; j < codeLengths[i]; j++) {
+        //@ts-ignore
         p = code.pop();
+        //@ts-ignore
         p.children[p.index] = values[k];
         while (p.index > 0) {
+          //@ts-ignore
           p = code.pop();
         }
         p.index++;
         code.push(p);
         while (code.length <= i) {
           code.push(q = {children: [], index: 0});
+          //@ts-ignore
           p.children[p.index] = q.children;
           p = q;
         }
@@ -83,6 +65,7 @@ let JpegImage = (function jpegImage() {
       if (i + 1 < length) {
         // p here points to last code
         code.push(q = {children: [], index: 0});
+        //@ts-ignore
         p.children[p.index] = q.children;
         p = q;
       }
@@ -90,10 +73,8 @@ let JpegImage = (function jpegImage() {
     return code[0].children;
   }
 
-  function decodeScan(data, offset,
-                      frame, components, resetInterval,
-                      spectralStart, spectralEnd,
-                      successivePrev, successive) {
+  //@ts-ignore
+  function decodeScan(data, offset, frame, components, resetInterval, spectralStart, spectralEnd, successivePrev, successive) {
     
     let mcusPerLine = frame.mcusPerLine;
     let progressive = frame.progressive;
@@ -115,6 +96,7 @@ let JpegImage = (function jpegImage() {
       bitsCount = 7;
       return bitsData >>> 7;
     }
+    //@ts-ignore
     function decodeHuffman(tree) {
       let node = tree, bit;
       while ((bit = readBit()) !== null) {
@@ -126,6 +108,7 @@ let JpegImage = (function jpegImage() {
       }
       return null;
     }
+    //@ts-ignore
     function receive(length) {
       let n = 0;
       while (length > 0) {
@@ -136,12 +119,16 @@ let JpegImage = (function jpegImage() {
       }
       return n;
     }
+    //@ts-ignore
     function receiveAndExtend(length) {
       let n = receive(length);
+      //@ts-ignore
       if (n >= 1 << (length - 1))
         return n;
+      //@ts-ignore
       return n + (-1 << length) + 1;
     }
+    //@ts-ignore
     function decodeBaseline(component, zz) {
       let t = decodeHuffman(component.huffmanTableDC);
       let diff = t === 0 ? 0 : receiveAndExtend(t);
@@ -149,6 +136,7 @@ let JpegImage = (function jpegImage() {
       let k = 1;
       while (k < 64) {
         let rs = decodeHuffman(component.huffmanTableAC);
+        //@ts-ignore
         let s = rs & 15, r = rs >> 4;
         if (s === 0) {
           if (r < 15)
@@ -162,15 +150,19 @@ let JpegImage = (function jpegImage() {
         k++;
       }
     }
+    //@ts-ignore
     function decodeDCFirst(component, zz) {
       let t = decodeHuffman(component.huffmanTableDC);
+      //@ts-ignore
       let diff = t === 0 ? 0 : (receiveAndExtend(t) << successive);
       zz[0] = (component.pred += diff);
     }
+    //@ts-ignore
     function decodeDCSuccessive(component, zz) {
       zz[0] |= readBit() << successive;
     }
     let eobrun = 0;
+    //@ts-ignore
     function decodeACFirst(component, zz) {
       if (eobrun > 0) {
         eobrun--;
@@ -179,9 +171,11 @@ let JpegImage = (function jpegImage() {
       let k = spectralStart, e = spectralEnd;
       while (k <= e) {
         let rs = decodeHuffman(component.huffmanTableAC);
+        //@ts-ignore
         let s = rs & 15, r = rs >> 4;
         if (s === 0) {
           if (r < 15) {
+            //@ts-ignore
             eobrun = receive(r) + (1 << r) - 1;
             break;
           }
@@ -190,11 +184,14 @@ let JpegImage = (function jpegImage() {
         }
         k += r;
         let z = dctZigZag[k];
+        //@ts-ignore
         zz[z] = receiveAndExtend(s) * (1 << successive);
         k++;
       }
     }
+    //@ts-ignore
     let successiveACState = 0, successiveACNextValue;
+    //@ts-ignore
     function decodeACSuccessive(component, zz) {
       let k = spectralStart, e = spectralEnd, r = 0;
       while (k <= e) {
@@ -203,10 +200,13 @@ let JpegImage = (function jpegImage() {
         switch (successiveACState) {
         case 0: // initial state
           let rs = decodeHuffman(component.huffmanTableAC);
+          //@ts-ignore
           let s = rs & 15;
+          //@ts-ignore
           r = rs >> 4
           if (s === 0) {
             if (r < 15) {
+              //@ts-ignore
               eobrun = receive(r) + (1 << r);
               successiveACState = 4;
             } else {
@@ -234,6 +234,7 @@ let JpegImage = (function jpegImage() {
           if (zz[z])
             zz[z] += (readBit() << successive) * direction;
           else {
+            //@ts-ignore
             zz[z] = successiveACNextValue << successive;
             successiveACState = 0;
           }
@@ -251,6 +252,7 @@ let JpegImage = (function jpegImage() {
           successiveACState = 0;
       }
     }
+    //@ts-ignore
     function decodeMcu(component, decode, mcu, row, col) {
       let mcuRow = (mcu / mcusPerLine) | 0;
       let mcuCol = mcu % mcusPerLine;
@@ -258,6 +260,7 @@ let JpegImage = (function jpegImage() {
       let blockCol = mcuCol * component.h + col;
       decode(component, component.blocks[blockRow][blockCol]);
     }
+    //@ts-ignore
     function decodeBlock(component, decode, mcu) {
       let blockRow = (mcu / component.blocksPerLine) | 0;
       let blockCol = mcu % component.blocksPerLine;
@@ -333,7 +336,7 @@ let JpegImage = (function jpegImage() {
 
     return offset - startOffset;
   }
-
+//@ts-ignore
   function buildComponentData(frame, component) {
     let lines = [];
     let blocksPerLine = component.blocksPerLine;
@@ -341,11 +344,7 @@ let JpegImage = (function jpegImage() {
     let samplesPerLine = blocksPerLine << 3;
     let R = new Int32Array(64), r = new Uint8Array(64);
 
-    // A port of poppler's IDCT method which in turn is taken from:
-    //   Christoph Loeffler, Adriaan Ligtenberg, George S. Moschytz,
-    //   "Practical Fast 1-D DCT Algorithms with 11 Multiplications",
-    //   IEEE Intl. Conf. on Acoustics, Speech & Signal Processing, 1989,
-    //   988-991.
+    //@ts-ignore
     function quantizeAndInverse(zz, dataOut, dataIn) {
       let qt = component.quantizationTable;
       let v0, v1, v2, v3, v4, v5, v6, v7, t;
@@ -520,11 +519,13 @@ let JpegImage = (function jpegImage() {
     return lines;
   }
 
+  //@ts-ignore
   function clampTo8bit(a) {
     return a < 0 ? 0 : a > 255 ? 255 : a;
   }
 
   constructor.prototype = {
+    //@ts-ignore
     load: function load(path) {
       // let xhr = new XMLHttpRequest();
       // xhr.open("GET", path, true);
@@ -551,6 +552,7 @@ let JpegImage = (function jpegImage() {
         offset += array.length;
         return array;
       }
+      //@ts-ignore
       function prepareComponents(frame) {
         let maxH = 0, maxV = 0;
         let component, componentId;
@@ -591,6 +593,7 @@ let JpegImage = (function jpegImage() {
       let adobe = null;
       let frame, resetInterval;
       let quantizationTables = [], frames = [];
+      //@ts-ignore
       let huffmanTablesAC = [], huffmanTablesDC = [];
       let fileMarker = readUint16();
       if (fileMarker != 0xFFD8) { // SOI (Start of Image)
@@ -676,12 +679,19 @@ let JpegImage = (function jpegImage() {
           case 0xFFC2: // SOF2 (Start of Frame, Progressive DCT)
             readUint16(); // skip data length
             frame = {};
+            //@ts-ignore
             frame.extended = (fileMarker === 0xFFC1);
+            //@ts-ignore
             frame.progressive = (fileMarker === 0xFFC2);
+            //@ts-ignore
             frame.precision = data[offset++];
+            //@ts-ignore
             frame.scanLines = readUint16();
+            //@ts-ignore
             frame.samplesPerLine = readUint16();
+            //@ts-ignore
             frame.components = {};
+            //@ts-ignore
             frame.componentsOrder = [];
             let componentsCount = data[offset++], componentId;
             for (i = 0; i < componentsCount; i++) {
@@ -689,7 +699,9 @@ let JpegImage = (function jpegImage() {
               let h = data[offset + 1] >> 4;
               let v = data[offset + 1] & 15;
               let qId = data[offset + 2];
+              //@ts-ignore
               frame.componentsOrder.push(componentId);
+              //@ts-ignore
               frame.components[componentId] = {
                 h: h,
                 v: v,
@@ -715,6 +727,7 @@ let JpegImage = (function jpegImage() {
               i += 17 + codeLengthSum;
 
               ((huffmanTableSpec >> 4) === 0 ?
+              //@ts-ignore
                 huffmanTablesDC : huffmanTablesAC)[huffmanTableSpec & 15] =
                 buildHuffmanTable(codeLengths, huffmanValues);
             }
@@ -730,9 +743,12 @@ let JpegImage = (function jpegImage() {
             let selectorsCount = data[offset++];
             let components = [], component;
             for (i = 0; i < selectorsCount; i++) {
+              //@ts-ignore
               component = frame.components[data[offset++]];
               let tableSpec = data[offset++];
+              //@ts-ignore
               component.huffmanTableDC = huffmanTablesDC[tableSpec >> 4];
+              //@ts-ignore
               component.huffmanTableAC = huffmanTablesAC[tableSpec & 15];
               components.push(component);
             }
@@ -769,27 +785,34 @@ let JpegImage = (function jpegImage() {
 
       // set each frame's components quantization table
       for (let i = 0; i < frames.length; i++) {
+        //@ts-ignore
         let cp = frames[i].components;
         for (let j in cp) {
           cp[j].quantizationTable = quantizationTables[cp[j].quantizationIdx];
           delete cp[j].quantizationIdx;
         }
       }
-
+      //@ts-ignore
       this.width = frame.samplesPerLine;
+      //@ts-ignore
       this.height = frame.scanLines;
       this.jfif = jfif;
       this.adobe = adobe;
       this.components = [];
+      //@ts-ignore
       for (let i = 0; i < frame.componentsOrder.length; i++) {
+        //@ts-ignore
         let component = frame.components[frame.componentsOrder[i]];
         this.components.push({
           lines: buildComponentData(frame, component),
+          //@ts-ignore
           scaleX: component.h / frame.maxH,
+          //@ts-ignore
           scaleY: component.v / frame.maxV
         });
       }
     },
+    //@ts-ignore
     getData: function getData(width, height) {
       let scaleX = this.width / width, scaleY = this.height / height;
 
@@ -913,6 +936,7 @@ let JpegImage = (function jpegImage() {
       }
       return data;
     },
+    //@ts-ignore
     copyToImageData: function copyToImageData(imageData) {
       let width = imageData.width, height = imageData.height;
       let imageDataArray = imageData.data;
@@ -977,6 +1001,7 @@ let JpegImage = (function jpegImage() {
 export const decode = function (jpegData: Uint8Array, colorTransform: boolean = true): Image {
 
   let arr = new Uint8Array(jpegData);
+  //@ts-ignore
   let decoder = new JpegImage();
   decoder.parse(arr);
   decoder.colorTransform = colorTransform;
