@@ -1,0 +1,13 @@
+{
+    "name": "jpeg.ts",
+    "description": "A pure TypeScript JPEG encoder and decoder for deno.",
+    "stable": true,
+    "files": [
+        "./LICENSE.ts",
+        "./mod.ts",
+        "./mod_test.ts",
+        "./README.md",
+        "./lib/**/*",
+        "./tests/**/*"
+    ]
+}
