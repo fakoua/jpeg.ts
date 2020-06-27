@@ -1,10 +1,10 @@
 export class Pixel {
-    //@ts-ignore
+    // @ts-ignore
     r: number
-    //@ts-ignore
+    // @ts-ignore
     g: number
-    //@ts-ignore
+    // @ts-ignore
     b: number 
-    //@ts-ignore
+    // @ts-ignore
     a: number
 }
