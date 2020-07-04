@@ -2,8 +2,10 @@
 
 A pure TypeScript JPEG encoder and decoder for deno
 
-[![Build Status](https://github.com/fakoua/jpeg.ts/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/fakoua/jpeg.ts/actions)
-
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/fakoua/jpeg.ts?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/fakoua/jpeg.ts?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/fakoua/jpeg.ts?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/fakoua/jpeg.ts/Deno%20CI?style=for-the-badge)
 ## decoder
 
 ```ts
