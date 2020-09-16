@@ -1,4 +1,4 @@
-import { Pixel } from "./pixel.ts";
+import type { Pixel } from "./pixel.ts";
 
 export class Image {
   // @ts-ignore
